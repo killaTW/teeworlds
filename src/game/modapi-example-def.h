@@ -3,6 +3,11 @@
 
 enum
 {
+	MODAPIEXAMPLE_IMAGE_WEAPONS = 0,
+};
+
+enum
+{
 	MODAPIEXAMPLE_SPRITE_TARGET = 0,
 };
 
