@@ -1,0 +1,9 @@
+#ifndef MODAPI_EXAMPLE_DEF_H
+#define MODAPI_EXAMPLE_DEF_H
+
+enum
+{
+	MODAPIEXAMPLE_SPRITE_TARGET = 0,
+};
+
+#endif

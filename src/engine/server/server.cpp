@@ -31,6 +31,9 @@
 #include <modapi/compatibility.h> //ModAPi
 #include <modapi/mod.h> //ModAPi
 
+#include <modapi/compatibility.h> //ModAPI Example
+#include <game/modapi-example-def.h> //ModAPI Example
+
 #include "register.h"
 #include "server.h"
 
@@ -1834,7 +1837,7 @@ int main(int argc, const char **argv) // ignore_convention
 
 //ModeAPI
 
-const char* CServer::m_aModName = "modapi-test";
+const char* CServer::m_aModName = "modapi-example";
 
 bool CServer::CreateMod(const char* pModName)
 {
@@ -1842,7 +1845,7 @@ bool CServer::CreateMod(const char* pModName)
 	str_format(aBuf, sizeof(aBuf), "mods/%s.mod", pModName);
 	
 	CModAPI_ModCreator ModCreator;
-	//if(ModCreator.AddSprite(MODAPI_INTERNALIMG_GAME, 15, 0, 2, 2, 32, 16) != 0) return false;
+	if(ModCreator.AddSprite(MODAPI_INTERNALIMG_GAME, 0, 6, 2, 2, 32, 16) != MODAPIEXAMPLE_SPRITE_TARGET) return false;
 	if(ModCreator.Save(Storage(), aBuf) < 0) return false;
 	
 	return true;

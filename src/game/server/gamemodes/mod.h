@@ -12,5 +12,7 @@ public:
 	CGameControllerMOD(class CGameContext *pGameServer);
 	virtual void Tick();
 	// add more virtual functions here if you wish
+	
+	virtual bool OnEntity(int Index, vec2 Pos);
 };
 #endif
