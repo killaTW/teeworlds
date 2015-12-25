@@ -7,10 +7,17 @@
 
 class CTarget : public CEntity
 {
+private:
+	bool m_Disabled;
+
 public:
 	CTarget(CGameWorld *pGameWorld, vec2 Pos);
 
 	virtual void Snap(int SnappingClient);
+	
+	void OnHit(int CID);
+	bool IsDisabled();
+	void Enable();
 };
 
 #endif

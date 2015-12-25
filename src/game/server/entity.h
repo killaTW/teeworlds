@@ -38,7 +38,7 @@ private:
 	/* State */
 	bool m_MarkedForDestroy;
 
-protected:
+public:
 	/* State */
 
 	/*

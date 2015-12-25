@@ -20,6 +20,36 @@ void CGameControllerMOD::Tick()
 {
 	// this is the main part of the gamemode, this function is run every tick
 
+	int NbTarget = 0;
+	int NbActiveTarget = 0;
+
+	CTarget *p = (CTarget *)GameServer()->m_World.FindFirst(CGameWorld::ENTTYPE_TARGET);
+	for(; p; p = (CTarget *)p->TypeNext())
+ 	{
+		NbTarget++;
+		if(!p->IsDisabled())
+		{
+			NbActiveTarget++;
+		}
+	}
+	
+	if(NbTarget > 0 && NbActiveTarget == 0)
+	{
+		int TargetToActivate = rand()%NbTarget;
+		int TargetIter = 0;
+		
+		CTarget *p = (CTarget *)GameServer()->m_World.FindFirst(CGameWorld::ENTTYPE_TARGET);
+		for(; p; p = (CTarget *)p->TypeNext())
+		{
+			if(TargetIter == TargetToActivate)
+			{
+				p->Enable();
+				break;
+			}
+			TargetIter++;
+		}
+	}
+
 	IGameController::Tick();
 }
 

@@ -1,7 +1,9 @@
 /* (c) Magnus Auvinen. See licence.txt in the root of the distribution for more information. */
 /* If you are missing that file, acquire a complete release at teeworlds.com.                */
 #include <game/server/gamecontext.h>
+#include <game/server/gameworld.h>
 
+#include "target.h"
 #include "character.h"
 #include "projectile.h"
 
@@ -63,20 +65,32 @@ void CProjectile::Tick()
 	vec2 CurPos = GetPos(Ct);
 	int Collide = GameServer()->Collision()->IntersectLine(PrevPos, CurPos, &CurPos, 0);
 	CCharacter *OwnerChar = GameServer()->GetPlayerChar(m_Owner);
-	CCharacter *TargetChr = GameServer()->m_World.IntersectCharacter(PrevPos, CurPos, 6.0f, CurPos, OwnerChar);
+	
+	//Find target
+	float ClosestLen = distance(PrevPos, CurPos) * 100.0f;
+	CTarget *pTarget = 0;
+	
+	CTarget *p = (CTarget *)GameServer()->m_World.FindFirst(CGameWorld::ENTTYPE_TARGET);
+	for(; p; p = (CTarget *)p->TypeNext())
+ 	{
+		vec2 IntersectPos = closest_point_on_line(PrevPos, CurPos, p->m_Pos);
+		float Len = distance(p->m_Pos, IntersectPos);
+		if(!p->IsDisabled() && Len < 32.0f)
+		{
+			p->OnHit(m_Owner);
+			pTarget = p;
+		}
+	}
 
 	m_LifeSpan--;
 
-	if(TargetChr || Collide || m_LifeSpan < 0 || GameLayerClipped(CurPos))
+	if(pTarget || Collide || m_LifeSpan < 0 || GameLayerClipped(CurPos))
 	{
 		if(m_LifeSpan >= 0 || m_Weapon == WEAPON_GRENADE)
 			GameServer()->CreateSound(CurPos, m_SoundImpact);
 
 		if(m_Explosive)
 			GameServer()->CreateExplosion(CurPos, m_Owner, m_Weapon, m_Damage);
-
-		else if(TargetChr)
-			TargetChr->TakeDamage(m_Direction * max(0.001f, m_Force), m_Damage, m_Owner, m_Weapon);
 
 		GameServer()->m_World.DestroyEntity(this);
 	}

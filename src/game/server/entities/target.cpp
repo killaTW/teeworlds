@@ -15,10 +15,15 @@ CTarget::CTarget(CGameWorld *pGameWorld, vec2 Pos)
 	Reset();
 
 	GameWorld()->InsertEntity(this);
+	
+	m_Disabled = true;
 }
 
 void CTarget::Snap(int SnappingClient)
 {
+	if(m_Disabled)
+		return;
+	
 	if(NetworkClipped(SnappingClient))
 		return;
 
@@ -41,4 +46,21 @@ void CTarget::Snap(int SnappingClient)
 		pP->m_Y = (int)m_Pos.y;
 		pP->m_Type = PICKUP_ARMOR;
 	}
+}
+	
+void CTarget::OnHit(int CID)
+{
+	m_Disabled = true;
+}
+
+bool CTarget::IsDisabled()
+{
+	return m_Disabled;
+}
+
+void CTarget::Enable()
+{
+	GameServer()->CreatePlayerSpawn(m_Pos);
+	
+	m_Disabled = false;
 }

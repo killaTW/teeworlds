@@ -342,7 +342,7 @@ void CItems::RenderModAPISprite(const CNetObj_ModAPI_Sprite *pCurrent)
 
 	vec2 Pos = vec2(pCurrent->m_X, pCurrent->m_Y);
 	
-	RenderTools()->DrawSprite(Pos.x-Size/2.0f, Pos.y-Size/2.0f, Size);
+	RenderTools()->DrawSprite(Pos.x, Pos.y, Size);
 	Graphics()->QuadsEnd();
 }
 
