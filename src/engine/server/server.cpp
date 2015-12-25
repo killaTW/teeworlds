@@ -1845,8 +1845,8 @@ bool CServer::CreateMod(const char* pModName)
 	str_format(aBuf, sizeof(aBuf), "mods/%s.mod", pModName);
 	
 	CModAPI_ModCreator ModCreator;
-	if(ModCreator.AddImage(Storage(), "modapi/weapons.png") != MODAPIEXAMPLE_IMAGE_WEAPONS) return false;
-	if(ModCreator.AddSpriteExternal(0, 1, 0, 1, 1, 16, 16) != MODAPIEXAMPLE_SPRITE_TARGET) return false;
+	if(ModCreator.AddImage(Storage(), "modapi/example.png") != MODAPIEXAMPLE_IMAGE_WEAPONS) return false;
+	if(ModCreator.AddSpriteExternal(0, 0, 0, 1, 1, 16, 16) != MODAPIEXAMPLE_SPRITE_TARGET) return false;
 	if(ModCreator.Save(Storage(), aBuf) < 0) return false;
 	
 	return true;
