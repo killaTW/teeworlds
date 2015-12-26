@@ -118,13 +118,13 @@ int CModAPI_ModCreator::AddLineStyle(int OuterWidth, int OuterColor, int InnerWi
 {
 	CModAPI_ModItem_LineStyle LineStyle;
 	LineStyle.m_Id = m_LineStyles.size();
-	LineStyle.m_OuterWidth;
-	LineStyle.m_OuterColor;
-	LineStyle.m_InnerWidth;
-	LineStyle.m_InnerColor;
-	LineStyle.m_SpriteId;
-	LineStyle.m_SpriteX;
-	LineStyle.m_SpriteY;
+	LineStyle.m_OuterWidth = OuterWidth;
+	LineStyle.m_OuterColor = OuterColor;
+	LineStyle.m_InnerWidth = InnerWidth;
+	LineStyle.m_InnerColor = InnerColor;
+	LineStyle.m_SpriteId = SpriteId;
+	LineStyle.m_SpriteX = SpriteX;
+	LineStyle.m_SpriteY = SpriteY;
 	
 	m_LineStyles.add(LineStyle);
 	

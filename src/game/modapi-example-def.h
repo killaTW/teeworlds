@@ -11,4 +11,9 @@ enum
 	MODAPIEXAMPLE_SPRITE_TARGET = 0,
 };
 
+enum
+{
+	MODAPIEXAMPLE_LINESTYLE_LASER = 0,
+};
+
 #endif

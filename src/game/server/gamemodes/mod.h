@@ -13,6 +13,7 @@ public:
 	virtual void Tick();
 	// add more virtual functions here if you wish
 	
+	virtual void OnCharacterSpawn(class CCharacter *pChr);
 	virtual bool OnEntity(int Index, vec2 Pos);
 	virtual int OnTargetShooted(class CTarget *pTarget, int Shooter);
 };

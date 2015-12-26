@@ -2,6 +2,7 @@
 /* If you are missing that file, acquire a complete release at teeworlds.com.                */
 #include "mod.h"
 
+#include <game/server/entities/character.h>
 #include <game/server/entities/target.h>
 #include <game/mapitems.h>
 #include <game/server/gamecontext.h>
@@ -52,6 +53,18 @@ void CGameControllerMOD::Tick()
 	}
 
 	IGameController::Tick();
+}
+
+void CGameControllerMOD::OnCharacterSpawn(CCharacter *pChr)
+{
+	pChr->IncreaseHealth(10);
+	pChr->IncreaseArmor(5);
+
+	pChr->GiveWeapon(WEAPON_HAMMER, -1);
+	pChr->GiveWeapon(WEAPON_GUN, 10);
+	pChr->GiveWeapon(WEAPON_SHOTGUN, 10);
+	pChr->GiveWeapon(WEAPON_GRENADE, 10);
+	pChr->GiveWeapon(WEAPON_LASER, 5);
 }
 
 bool CGameControllerMOD::OnEntity(int Index, vec2 Pos)

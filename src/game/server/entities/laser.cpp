@@ -2,8 +2,9 @@
 /* If you are missing that file, acquire a complete release at teeworlds.com.                */
 #include <generated/server_data.h>
 #include <game/server/gamecontext.h>
+#include <modapi/compatibility.h>
 
-#include "character.h"
+#include "target.h"
 #include "laser.h"
 
 CLaser::CLaser(CGameWorld *pGameWorld, vec2 Pos, vec2 Direction, float StartEnergy, int Owner)
@@ -18,20 +19,34 @@ CLaser::CLaser(CGameWorld *pGameWorld, vec2 Pos, vec2 Direction, float StartEner
 	DoBounce();
 }
 
-
-bool CLaser::HitCharacter(vec2 From, vec2 To)
+bool CLaser::HitTarget(vec2 From, vec2 To)
 {
-	vec2 At;
-	CCharacter *pOwnerChar = GameServer()->GetPlayerChar(m_Owner);
-	CCharacter *pHit = GameServer()->m_World.IntersectCharacter(m_Pos, To, 0.f, At, pOwnerChar);
-	if(!pHit)
-		return false;
+	//Find target
+	float ClosestLen = distance(From, To) * 100.0f;
+	CTarget *pTarget = 0;
+	
+	CTarget *p = (CTarget *)GameServer()->m_World.FindFirst(CGameWorld::ENTTYPE_TARGET);
+	for(; p; p = (CTarget *)p->TypeNext())
+ 	{
+		vec2 IntersectPos = closest_point_on_line(From, To, p->m_Pos);
+		float Len = distance(p->m_Pos, IntersectPos);
+		if(!p->IsDisabled() && Len < 32.0f)
+		{
+			p->OnHit(m_Owner);
+			pTarget = p;
+		}
+	}
+	
+	if(pTarget)
+	{
+		m_From = From;
+		m_Pos = pTarget->m_Pos;
+		m_Energy = -1;
+		return true;
+	}
+	
+	return false;
 
-	m_From = From;
-	m_Pos = At;
-	m_Energy = -1;
-	pHit->TakeDamage(vec2(0.f, 0.f), g_pData->m_Weapons.m_aId[WEAPON_LASER].m_Damage, m_Owner, WEAPON_LASER);
-	return true;
 }
 
 void CLaser::DoBounce()
@@ -48,7 +63,7 @@ void CLaser::DoBounce()
 
 	if(GameServer()->Collision()->IntersectLine(m_Pos, To, 0x0, &To))
 	{
-		if(!HitCharacter(m_Pos, To))
+		if(!HitTarget(m_Pos, To))
 		{
 			// intersected
 			m_From = m_Pos;
@@ -72,7 +87,7 @@ void CLaser::DoBounce()
 	}
 	else
 	{
-		if(!HitCharacter(m_Pos, To))
+		if(!HitTarget(m_Pos, To))
 		{
 			m_From = m_Pos;
 			m_Pos = To;
@@ -102,13 +117,29 @@ void CLaser::Snap(int SnappingClient)
 	if(NetworkClipped(SnappingClient) && NetworkClipped(SnappingClient, m_From))
 		return;
 
-	CNetObj_Laser *pObj = static_cast<CNetObj_Laser *>(Server()->SnapNewItem(NETOBJTYPE_LASER, GetID(), sizeof(CNetObj_Laser)));
-	if(!pObj)
-		return;
+	if(Server()->GetClientProtocolCompatibility(SnappingClient, MODAPI_COMPATIBILITY_LINE))
+	{
+		CNetObj_ModAPI_Line* pLine = static_cast<CNetObj_ModAPI_Line*>(Server()->SnapNewItem(NETOBJTYPE_MODAPI_LINE, GetID(), sizeof(CNetObj_ModAPI_Line)));
+		if(!pLine)
+			return;
+			
+		pLine->m_LineStyleId = 0;
+		pLine->m_StartX = (int) m_From.x;
+		pLine->m_StartY = (int) m_From.y;
+		pLine->m_EndX = (int)m_Pos.x;
+		pLine->m_EndY = (int)m_Pos.y;
+	}
+	else
+	{
+		CNetObj_Laser *pObj = static_cast<CNetObj_Laser *>(Server()->SnapNewItem(NETOBJTYPE_LASER, GetID(), sizeof(CNetObj_Laser)));
+		if(!pObj)
+			return;
 
-	pObj->m_X = (int)m_Pos.x;
-	pObj->m_Y = (int)m_Pos.y;
-	pObj->m_FromX = (int)m_From.x;
-	pObj->m_FromY = (int)m_From.y;
-	pObj->m_StartTick = m_EvalTick;
+		pObj->m_X = (int)m_Pos.x;
+		pObj->m_Y = (int)m_Pos.y;
+		pObj->m_FromX = (int)m_From.x;
+		pObj->m_FromY = (int)m_From.y;
+		pObj->m_StartTick = m_EvalTick;
+	}
+	
 }

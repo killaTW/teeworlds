@@ -31,6 +31,9 @@ void CTarget::Snap(int SnappingClient)
 	if(Server()->GetClientProtocolCompatibility(SnappingClient, MODAPI_COMPATIBILITY_SPRITE))
 	{
 		CNetObj_ModAPI_Sprite* pSprite = static_cast<CNetObj_ModAPI_Sprite*>(Server()->SnapNewItem(NETOBJTYPE_MODAPI_SPRITE, GetID(), sizeof(CNetObj_ModAPI_Sprite)));
+		if(!pSprite)
+			return;
+			
 		pSprite->m_SpriteId = MODAPIEXAMPLE_SPRITE_TARGET;
 		pSprite->m_X = (int) m_Pos.x;
 		pSprite->m_Y = (int) m_Pos.y;
@@ -61,6 +64,8 @@ bool CTarget::IsDisabled()
 
 void CTarget::Disable()
 {
+	GameServer()->CreateExplosion(m_Pos, -1, -1, 0);
+			
 	m_Disabled = true;
 }
 
