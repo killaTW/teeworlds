@@ -1850,7 +1850,11 @@ bool CServer::CreateMod(const char* pModName)
 	CModAPI_ModCreator ModCreator;
 	if(ModCreator.AddImage(Storage(), "modapi/example.png") != MODAPIEXAMPLE_IMAGE_WEAPONS) return false;
 	if(ModCreator.AddSpriteExternal(0, 0, 0, 1, 1, 16, 16) != MODAPIEXAMPLE_SPRITE_TARGET) return false;
-	if(ModCreator.AddLineStyle(7, 0, 5, 0, -1, 0, 0, MODAPI_LINESTYLEANIM_SCALEDOWN, 150) != MODAPIEXAMPLE_LINESTYLE_LASER) return false;
+	
+	ModCreator.AddLineStyle()
+		.SetOuter(7, vec4(1.0f, 1.0f, 1.0f, 1.0f))
+		.SetInner(5, vec4(1.0f, 0.0f, 0.0f, 1.0f));
+	
 	if(ModCreator.Save(Storage(), aBuf) < 0) return false;
 	
 	return true;
