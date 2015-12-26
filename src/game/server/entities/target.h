@@ -17,6 +17,7 @@ public:
 	
 	void OnHit(int CID);
 	bool IsDisabled();
+	void Disable();
 	void Enable();
 };
 

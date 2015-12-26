@@ -14,5 +14,6 @@ public:
 	// add more virtual functions here if you wish
 	
 	virtual bool OnEntity(int Index, vec2 Pos);
+	virtual int OnTargetShooted(class CTarget *pTarget, int Shooter);
 };
 #endif

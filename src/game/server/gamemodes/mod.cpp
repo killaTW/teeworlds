@@ -5,13 +5,14 @@
 #include <game/server/entities/target.h>
 #include <game/mapitems.h>
 #include <game/server/gamecontext.h>
+#include <game/server/player.h>
 
 CGameControllerMOD::CGameControllerMOD(class CGameContext *pGameServer)
 : IGameController(pGameServer)
 {
 	// Exchange this to a string that identifies your game mode.
 	// DM, TDM and CTF are reserved for teeworlds original modes.
-	m_pGameType = "MOD";
+	m_pGameType = "Target";
 
 	//m_GameFlags = GAMEFLAG_TEAMS; // GAMEFLAG_TEAMS makes it a two-team gamemode
 }
@@ -71,4 +72,18 @@ bool CGameControllerMOD::OnEntity(int Index, vec2 Pos)
 	}
 
 	return false;
+}
+	
+int CGameControllerMOD::OnTargetShooted(class CTarget *pTarget, int Shooter)
+{
+	if(pTarget && !pTarget->IsDisabled())
+	{
+		pTarget->Disable();
+		
+		CPlayer* pShooter = GameServer()->m_apPlayers[Shooter];
+		if(pShooter)
+		{
+			pShooter->m_Score++;
+		}
+	}
 }

@@ -6,6 +6,7 @@
 
 #include "entities/character.h"
 #include "entities/pickup.h"
+#include "entities/target.h"
 #include "gamecontext.h"
 #include "gamecontroller.h"
 #include "player.h"
@@ -1139,4 +1140,11 @@ int IGameController::GetStartTeam()
 		return Team;
 	}
 	return TEAM_SPECTATORS;
+}
+
+// event
+
+int IGameController::OnTargetShooted(CTarget *pTarget, int Shooter)
+{
+	return 0;
 }

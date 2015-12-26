@@ -143,6 +143,8 @@ public:
 	virtual void OnCharacterSpawn(class CCharacter *pChr);
 
 	virtual void OnFlagReturn(class CFlag *pFlag);
+	
+	virtual int OnTargetShooted(class CTarget *pTarget, int Shooter);
 
 	/*
 		Function: on_entity

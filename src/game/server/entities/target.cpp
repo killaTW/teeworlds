@@ -2,6 +2,7 @@
 /* If you are missing that file, acquire a complete release at teeworlds.com.                */
 #include <generated/server_data.h>
 #include <game/server/gamecontext.h>
+#include <game/server/gamecontroller.h>
 #include <game/server/player.h>
 #include <game/modapi-example-def.h>
 #include <modapi/compatibility.h>
@@ -50,12 +51,17 @@ void CTarget::Snap(int SnappingClient)
 	
 void CTarget::OnHit(int CID)
 {
-	m_Disabled = true;
+	GameServer()->m_pController->OnTargetShooted(this, CID);
 }
 
 bool CTarget::IsDisabled()
 {
 	return m_Disabled;
+}
+
+void CTarget::Disable()
+{
+	m_Disabled = true;
 }
 
 void CTarget::Enable()
