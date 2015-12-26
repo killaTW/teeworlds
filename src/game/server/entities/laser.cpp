@@ -128,6 +128,7 @@ void CLaser::Snap(int SnappingClient)
 		pLine->m_StartY = (int) m_From.y;
 		pLine->m_EndX = (int)m_Pos.x;
 		pLine->m_EndY = (int)m_Pos.y;
+		pLine->m_StartTick = m_EvalTick;
 	}
 	else
 	{
