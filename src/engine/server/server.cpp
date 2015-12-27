@@ -1856,6 +1856,7 @@ bool CServer::CreateMod(const char* pModName)
 	
 	ModCreator.AddLineStyle()
 		.SetLineRepeatedSprite(MODAPIEXAMPLE_SPRITE_XMASLINE, 32, 32);
+		.SetEndPointSprite(MODAPIEXAMPLE_SPRITE_XMASEND, 64, 64);
 	
 	if(ModCreator.Save(Storage(), aBuf) < 0) return false;
 	
