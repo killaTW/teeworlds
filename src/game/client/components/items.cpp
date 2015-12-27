@@ -433,7 +433,7 @@ void CItems::RenderModAPILine(const struct CNetObj_ModAPI_Line *pCurrent)
 		int SpriteId = pLineStyle->m_LineSprite0;
 		{
 			int NbSprite = 1 + pLineStyle->m_LineSprite1 - pLineStyle->m_LineSprite0;
-			SpriteId = static_cast<int>(Ms/pLineStyle->m_LineSpriteSpeed)%NbSprite;
+			SpriteId += static_cast<int>(Ms/pLineStyle->m_LineSpriteSpeed)%NbSprite;
 		}		
 		
 		const CModAPI_Sprite* pSprite = ModAPIGraphics()->GetSprite(SpriteId);

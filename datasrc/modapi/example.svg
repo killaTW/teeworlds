@@ -14,7 +14,10 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="New document 1">
+   sodipodi:docname="example.svg"
+   inkscape:export-filename="/home/adrienpilleboue/Projects/teeworlds-modapi/datasrc/modapi/example.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -24,17 +27,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.959798"
-     inkscape:cx="48.481105"
-     inkscape:cy="970.41322"
+     inkscape:zoom="11.2"
+     inkscape:cx="83.841998"
+     inkscape:cy="1001.5323"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     showgrid="false"
+     showgrid="true"
      inkscape:window-width="1855"
      inkscape:window-height="1056"
      inkscape:window-x="65"
      inkscape:window-y="24"
-     inkscape:window-maximized="1">
+     inkscape:window-maximized="1"
+     showguides="false">
     <inkscape:grid
        type="xygrid"
        id="grid3753"
@@ -62,6 +66,24 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-28.362183)">
+    <path
+       style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#5030db;fill-opacity:1;stroke:none;stroke-width:4;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+       d="m 96,57.643433 0,5.4375 c -7.653202,7.111838 -16.303724,14.28125 -32,14.28125 l 0,-4 c 15.375,0 22.625,-6.96875 30.625,-14.46875 0.446905,-0.418973 0.922172,-0.829204 1.375,-1.25 z"
+       id="path3828"
+       inkscape:connector-curvature="0" />
+    <path
+       style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#5030db;fill-opacity:1;stroke:none;stroke-width:4;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+       d="m 128,43.362183 0,4 c -15.375,0 -22.625,6.96875 -30.625,14.46875 -0.4469,0.418973 -0.92217,0.829204 -1.375,1.25 l 0,-5.4375 c 7.6532,-7.111838 16.30372,-14.28125 32,-14.28125 z"
+       id="path3826"
+       inkscape:connector-curvature="0" />
+    <rect
+       y="20"
+       x="64"
+       height="24"
+       width="64"
+       id="rect3817"
+       style="fill:#b8d7ff;fill-opacity:1;stroke:none"
+       transform="translate(0,28.362183)" />
     <path
        sodipodi:type="arc"
        style="fill:#976203;fill-opacity:1;stroke:none"
@@ -112,5 +134,22 @@
        id="path3767"
        style="fill:none;stroke:#aa2e2c;stroke-width:9.48397732;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        sodipodi:type="arc" />
+    <path
+       style="fill:#4481d0;fill-opacity:1;stroke:none"
+       d="m 128,68.362183 c -32,-6 -32,4 -64,0 l 0,4 64,0 z"
+       id="rect3815"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       sodipodi:nodetypes="ccccc"
+       inkscape:connector-curvature="0"
+       id="path3822"
+       d="m 64,52.362183 c 32,6 32,-4 64,0 l 0,-4 -64,0 z"
+       style="fill:#4481d0;fill-opacity:1;stroke:none" />
+    <path
+       style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#5030db;fill-opacity:1;stroke:none;stroke-width:4;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+       d="m 64,43.362183 0,4 c 15.375,0 22.625,6.96875 30.625,14.46875 8,7.5 16.75,15.53125 33.375,15.53125 l 0,-4 c -15.375,0 -22.625,-6.96875 -30.625,-14.46875 -8,-7.5 -16.75,-15.53125 -33.375,-15.53125 z"
+       id="path3824"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>

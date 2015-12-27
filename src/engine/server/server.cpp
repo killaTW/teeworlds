@@ -1850,11 +1850,10 @@ bool CServer::CreateMod(const char* pModName)
 	CModAPI_ModCreator ModCreator;
 	if(ModCreator.AddImage(Storage(), "modapi/example.png") != MODAPIEXAMPLE_IMAGE_WEAPONS) return false;
 	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_WEAPONS, 0, 0, 1, 1, 16, 16) != MODAPIEXAMPLE_SPRITE_TARGET) return false;
-	if(ModCreator.AddSpriteInternal(MODAPI_INTERNALIMG_GAME, 2, 0, 1, 1, 32, 16) != MODAPIEXAMPLE_SPRITE_HOOKCHAIN) return false;
+	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_WEAPONS, 1, 0, 1, 1, 16, 16) != MODAPIEXAMPLE_SPRITE_HOOKCHAIN) return false;
 	
 	ModCreator.AddLineStyle()
-		.SetOuter(7, vec4(1.0f, 1.0f, 1.0f, 1.0f))
-		.SetInner(5, vec4(1.0f, 0.0f, 0.0f, 1.0f));
+		.SetLineSprite(MODAPIEXAMPLE_SPRITE_HOOKCHAIN, MODAPIEXAMPLE_SPRITE_HOOKCHAIN, 32, 32, 0);
 	
 	if(ModCreator.Save(Storage(), aBuf) < 0) return false;
 	
