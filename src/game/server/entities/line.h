@@ -8,7 +8,7 @@
 class CLine : public CEntity
 {
 public:
-	CLaser(CGameWorld *pGameWorld, vec2 StartPos, vec2 EndPos, int Owner);
+	CLine(CGameWorld *pGameWorld, vec2 StartPos, vec2 EndPos, int Owner);
 
 	virtual void Reset();
 	virtual void Tick();

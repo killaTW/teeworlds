@@ -125,6 +125,9 @@ private:
 	CCharacterCore m_SendCore; // core that we should send
 	CCharacterCore m_ReckoningCore; // the dead reckoning core
 
+	//Server example
+	bool m_LinePoint;
+	vec2 m_LinePointPos;
 };
 
 #endif

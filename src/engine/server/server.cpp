@@ -1848,12 +1848,14 @@ bool CServer::CreateMod(const char* pModName)
 	str_format(aBuf, sizeof(aBuf), "mods/%s.mod", pModName);
 	
 	CModAPI_ModCreator ModCreator;
-	if(ModCreator.AddImage(Storage(), "modapi/example.png") != MODAPIEXAMPLE_IMAGE_WEAPONS) return false;
-	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_WEAPONS, 0, 0, 1, 1, 16, 16) != MODAPIEXAMPLE_SPRITE_TARGET) return false;
-	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_WEAPONS, 1, 0, 1, 1, 16, 16) != MODAPIEXAMPLE_SPRITE_HOOKCHAIN) return false;
+	if(ModCreator.AddImage(Storage(), "modapi/example.png") != MODAPIEXAMPLE_IMAGE_EXAMPLE) return false;
+	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_EXAMPLE, 0, 0, 2, 2, 32, 32) != MODAPIEXAMPLE_SPRITE_TARGET) return false;
+	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_EXAMPLE, 2, 0, 1, 1, 32, 32) != MODAPIEXAMPLE_SPRITE_XMASLINESTART) return false;
+	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_EXAMPLE, 3, 0, 1, 1, 32, 32) != MODAPIEXAMPLE_SPRITE_XMASLINE) return false;
+	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_EXAMPLE, 4, 0, 2, 2, 32, 32) != MODAPIEXAMPLE_SPRITE_XMASLINEEND) return false;
 	
 	ModCreator.AddLineStyle()
-		.SetLineSprite(MODAPIEXAMPLE_SPRITE_HOOKCHAIN, MODAPIEXAMPLE_SPRITE_HOOKCHAIN, 32, 32, 0);
+		.SetLineRepeatedSprite(MODAPIEXAMPLE_SPRITE_XMASLINE, 32, 32);
 	
 	if(ModCreator.Save(Storage(), aBuf) < 0) return false;
 	

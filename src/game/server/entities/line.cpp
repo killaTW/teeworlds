@@ -3,17 +3,17 @@
 #include <generated/server_data.h>
 #include <game/server/gamecontext.h>
 #include <modapi/compatibility.h>
+#include <game/modapi-example-def.h>
 
-#include "target.h"
-#include "laser.h"
+#include "line.h"
 
 CLine::CLine(CGameWorld *pGameWorld, vec2 StartPos, vec2 EndPos, int Owner)
 : CEntity(pGameWorld, CGameWorld::ENTTYPE_LINE, StartPos)
 {
 	m_Owner = Owner;
 	m_EndPos = EndPos;
-	m_StartTick = Server->Tick();
-	m_LifeSpan = Server->TickSpeed()*10;
+	m_StartTick = Server()->Tick();
+	m_LifeSpan = Server()->TickSpeed()*10;
 	GameWorld()->InsertEntity(this);
 }
 
@@ -38,7 +38,7 @@ void CLine::TickPaused()
 
 void CLine::Snap(int SnappingClient)
 {
-	if(NetworkClipped(SnappingClient) && NetworkClipped(SnappingClient, m_From))
+	if(NetworkClipped(SnappingClient) && NetworkClipped(SnappingClient, m_EndPos))
 		return;
 
 	if(Server()->GetClientProtocolCompatibility(SnappingClient, MODAPI_COMPATIBILITY_LINE))
@@ -47,9 +47,9 @@ void CLine::Snap(int SnappingClient)
 		if(!pLine)
 			return;
 			
-		pLine->m_LineStyleId = 0;
-		pLine->m_StartX = (int) m_From.x;
-		pLine->m_StartY = (int) m_From.y;
+		pLine->m_LineStyleId = MODAPIEXAMPLE_LINESTYLE_XMAS;
+		pLine->m_StartX = (int) m_Pos.x;
+		pLine->m_StartY = (int) m_Pos.y;
 		pLine->m_EndX = (int)m_EndPos.x;
 		pLine->m_EndY = (int)m_EndPos.y;
 		pLine->m_StartTick = m_StartTick;
@@ -60,11 +60,11 @@ void CLine::Snap(int SnappingClient)
 		if(!pObj)
 			return;
 
-		pObj->m_X = (int)m_Pos.x;
-		pObj->m_Y = (int)m_Pos.y;
-		pObj->m_FromX = (int)m_From.x;
-		pObj->m_FromY = (int)m_From.y;
-		pObj->m_StartTick = m_EvalTick;
+		pObj->m_X = (int)m_EndPos.x;
+		pObj->m_Y = (int)m_EndPos.y;
+		pObj->m_FromX = (int)m_Pos.x;
+		pObj->m_FromY = (int)m_Pos.y;
+		pObj->m_StartTick = m_StartTick;
 	}
 	
 }
