@@ -380,7 +380,7 @@ void CItems::RenderModAPILine(const struct CNetObj_ModAPI_Line *pCurrent)
 	
 	float Ticks = Client()->GameTick() + Client()->IntraGameTick() - pCurrent->m_StartTick;
 	float Ms = (Ticks/50.0f) * 1000.0f;
-	if(pLineStyle->m_AnimationType == MODAPI_LINESTYLEANIM_SCALEDOWN)
+	if(pLineStyle->m_AnimationType == MODAPI_LINESTYLE_ANIMATION_SCALEDOWN)
 	{
 		float Speed = Ms / pLineStyle->m_AnimationSpeed;
 		ScaleFactor = 1.0f - clamp(Speed, 0.0f, 1.0f);
@@ -427,14 +427,9 @@ void CItems::RenderModAPILine(const struct CNetObj_ModAPI_Line *pCurrent)
 	Graphics()->QuadsEnd();
 	
 	//Sprite for line
-	if(pLineStyle->m_LineSprite0 >= 0)
+	if(pLineStyle->m_LineSprite1 >= 0)
 	{
-		//Choose the sprite based on animation
-		int SpriteId = pLineStyle->m_LineSprite0;
-		{
-			int NbSprite = 1 + pLineStyle->m_LineSprite1 - pLineStyle->m_LineSprite0;
-			SpriteId += static_cast<int>(Ms/pLineStyle->m_LineSpriteSpeed)%NbSprite;
-		}		
+		int SpriteId = pLineStyle->m_LineSprite1;
 		
 		const CModAPI_Sprite* pSprite = ModAPIGraphics()->GetSprite(SpriteId);
 		if(pSprite == 0) return;
@@ -470,12 +465,11 @@ void CItems::RenderModAPILine(const struct CNetObj_ModAPI_Line *pCurrent)
 		
 		IGraphics::CQuadItem Array[1024];
 		int i = 0;
-		float stepX = pLineStyle->m_LineSpriteSizeX;
-		float stepY = pLineStyle->m_LineSpriteSizeY;
-		for(float f = 0.0; f < Length && i < 1024; f += stepX, i++)
+		float step = pLineStyle->m_LineSpriteSizeX - pLineStyle->m_LineSpriteOverlapping;
+		for(float f = 0.0; f < Length && i < 1024; f += step, i++)
 		{
 			vec2 p = StartPos + Dir*f;
-			Array[i] = IGraphics::CQuadItem(p.x, p.y,stepX,stepY * ScaleFactor);
+			Array[i] = IGraphics::CQuadItem(p.x, p.y, pLineStyle->m_LineSpriteSizeX, pLineStyle->m_LineSpriteSizeY * ScaleFactor);
 		}
 
 		Graphics()->QuadsDraw(Array, i);
