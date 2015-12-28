@@ -1853,11 +1853,19 @@ bool CServer::CreateMod(const char* pModName)
 	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_EXAMPLE, 2, 0, 1, 1, 32, 32) != MODAPIEXAMPLE_SPRITE_XMASLINESTART) return false;
 	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_EXAMPLE, 3, 0, 1, 1, 32, 32) != MODAPIEXAMPLE_SPRITE_XMASLINE) return false;
 	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_EXAMPLE, 4, 0, 2, 2, 32, 32) != MODAPIEXAMPLE_SPRITE_XMASLINEEND) return false;
+	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_EXAMPLE, 0, 2, 1, 1, 32, 32) != MODAPIEXAMPLE_SPRITE_RED) return false;
+	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_EXAMPLE, 1, 2, 1, 1, 32, 32) != MODAPIEXAMPLE_SPRITE_BLUE) return false;
+	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_EXAMPLE, 2, 2, 1, 1, 32, 32) != MODAPIEXAMPLE_SPRITE_GREEN) return false;
 	
 	ModCreator.AddLineStyle()
 		.SetLineRepeatedSprite(MODAPIEXAMPLE_SPRITE_XMASLINE, 32, 32)
-		.SetStartPointSprite(MODAPIEXAMPLE_SPRITE_XMASLINESTART, 16, 16, 64, 64)
-		.SetEndPointSprite(MODAPIEXAMPLE_SPRITE_XMASLINEEND, 16, 16, 64, 64);
+		.SetStartPointSprite(MODAPIEXAMPLE_SPRITE_XMASLINESTART, -16, 0, 32, 32)
+		.SetEndPointSprite(MODAPIEXAMPLE_SPRITE_XMASLINEEND, 32, 16, 64, 64);
+		
+	//~ ModCreator.AddLineStyle()
+		//~ .SetLineRepeatedSprite(MODAPIEXAMPLE_SPRITE_RED, 32, 32)
+		//~ .SetStartPointSprite(MODAPIEXAMPLE_SPRITE_GREEN, 0, 32, 32, 32)
+		//~ .SetEndPointSprite(MODAPIEXAMPLE_SPRITE_BLUE, 0, 32, 32, 32);
 	
 	if(ModCreator.Save(Storage(), aBuf) < 0) return false;
 	
