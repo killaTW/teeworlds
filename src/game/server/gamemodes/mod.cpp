@@ -60,11 +60,11 @@ void CGameControllerMOD::OnCharacterSpawn(CCharacter *pChr)
 	pChr->IncreaseHealth(10);
 	pChr->IncreaseArmor(5);
 
-	pChr->GiveWeapon(WEAPON_HAMMER, -1);
-	pChr->GiveWeapon(WEAPON_GUN, 10);
-	pChr->GiveWeapon(WEAPON_SHOTGUN, 10);
-	pChr->GiveWeapon(WEAPON_GRENADE, 10);
-	pChr->GiveWeapon(WEAPON_LASER, 5);
+	pChr->RemoveWeapon(WEAPON_HAMMER);
+	pChr->RemoveWeapon(WEAPON_GUN);
+	pChr->RemoveWeapon(WEAPON_SHOTGUN);
+	pChr->RemoveWeapon(WEAPON_GRENADE);
+	pChr->GiveWeapon(WEAPON_LASER, -1);
 }
 
 bool CGameControllerMOD::OnEntity(int Index, vec2 Pos)

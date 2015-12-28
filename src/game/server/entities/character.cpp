@@ -436,6 +436,14 @@ bool CCharacter::GiveWeapon(int Weapon, int Ammo)
 	return false;
 }
 
+bool CCharacter::RemoveWeapon(int Weapon)
+{
+	m_aWeapons[Weapon].m_Got = false;
+	m_aWeapons[Weapon].m_Ammo = 0;
+	
+	return true;
+}
+
 void CCharacter::GiveNinja()
 {
 	m_Ninja.m_ActivationTick = Server()->Tick();
