@@ -65,6 +65,8 @@ void CGameControllerMOD::OnCharacterSpawn(CCharacter *pChr)
 	pChr->RemoveWeapon(WEAPON_SHOTGUN);
 	pChr->RemoveWeapon(WEAPON_GRENADE);
 	pChr->GiveWeapon(WEAPON_LASER, -1);
+	
+	pChr->SetActiveWeapon(WEAPON_LASER);
 }
 
 bool CGameControllerMOD::OnEntity(int Index, vec2 Pos)

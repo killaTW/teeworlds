@@ -444,6 +444,12 @@ bool CCharacter::RemoveWeapon(int Weapon)
 	return true;
 }
 
+void CCharacter::SetActiveWeapon(int Weapon)
+{
+	m_ActiveWeapon = Weapon;
+	m_LastWeapon = Weapon;
+}
+
 void CCharacter::GiveNinja()
 {
 	m_Ninja.m_ActivationTick = Server()->Tick();
