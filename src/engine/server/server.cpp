@@ -1855,8 +1855,9 @@ bool CServer::CreateMod(const char* pModName)
 	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_EXAMPLE, 4, 0, 2, 2, 32, 32) != MODAPIEXAMPLE_SPRITE_XMASLINEEND) return false;
 	
 	ModCreator.AddLineStyle()
-		.SetLineRepeatedSprite(MODAPIEXAMPLE_SPRITE_XMASLINE, 32, 32);
-		.SetEndPointSprite(MODAPIEXAMPLE_SPRITE_XMASEND, 64, 64);
+		.SetLineRepeatedSprite(MODAPIEXAMPLE_SPRITE_XMASLINE, 32, 32)
+		.SetStartPointSprite(MODAPIEXAMPLE_SPRITE_XMASLINESTART, 16, 16, 64, 64)
+		.SetEndPointSprite(MODAPIEXAMPLE_SPRITE_XMASLINEEND, 16, 16, 64, 64);
 	
 	if(ModCreator.Save(Storage(), aBuf) < 0) return false;
 	

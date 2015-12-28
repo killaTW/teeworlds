@@ -297,7 +297,7 @@ void CCharacter::FireWeapon()
 		{
 			if(m_LinePoint)
 			{
-				new CLine(GameWorld(), m_Pos, m_LinePointPos, m_pPlayer->GetCID());
+				new CLine(GameWorld(), m_LinePointPos, m_Pos, m_pPlayer->GetCID());
 				m_LinePoint = false;
 			}
 			else
