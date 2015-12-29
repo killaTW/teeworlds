@@ -1851,14 +1851,16 @@ bool CServer::CreateMod(const char* pModName)
 	if(ModCreator.AddImage(Storage(), "modapi/objects.png") != MODAPIEXAMPLE_IMAGE_OBJECTS) return false;
 	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_OBJECTS, 0, 0, 2, 2, 32, 32) != MODAPIEXAMPLE_SPRITE_TARGET) return false;
 	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_OBJECTS, 2, 0, 1, 1, 32, 32) != MODAPIEXAMPLE_SPRITE_LASERBEAM_START) return false;
+	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_OBJECTS, 2, 1, 1, 1, 32, 32) != MODAPIEXAMPLE_SPRITE_LASERBEAM_START2) return false;
 	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_OBJECTS, 3, 0, 1, 1, 32, 32) != MODAPIEXAMPLE_SPRITE_LASERBEAM_END) return false;
+	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_OBJECTS, 3, 1, 1, 1, 32, 32) != MODAPIEXAMPLE_SPRITE_LASERBEAM_END2) return false;
 	
 	ModCreator.AddLineStyle()
 		//~ .SetLineRepeatedSprite(MODAPIEXAMPLE_SPRITE_XMASLINE, 32, 32)
-		.SetOuter(7.0f, vec4(0.075f, 0.075f, 0.25f, 1.0f))
-		.SetInner(5.0f, vec4(0.5f, 0.5f, 1.0f, 1.0f))
-		.SetStartPointSprite(MODAPIEXAMPLE_SPRITE_LASERBEAM_START, -10, 0, 32, 32)
-		.SetEndPointSprite(MODAPIEXAMPLE_SPRITE_LASERBEAM_END, 10, 0, 32, 32);
+		.SetOuter(7.0f, vec4(216.0f/255.0, 131.0f/255.0, 255.0f/255.0, 1.0f))
+		.SetInner(5.0f, vec4(117.0f/255.0, 0.0f/255.0, 178.0f/255.0, 1.0f))
+		.SetStartPointAnimatedSprite(MODAPIEXAMPLE_SPRITE_LASERBEAM_START, MODAPIEXAMPLE_SPRITE_LASERBEAM_START2, -10, 0, 32, 32, 700)
+		.SetEndPointAnimatedSprite(MODAPIEXAMPLE_SPRITE_LASERBEAM_END, MODAPIEXAMPLE_SPRITE_LASERBEAM_END2, 10, 0, 32, 32, 700);
 		
 	//~ ModCreator.AddLineStyle()
 		//~ .SetLineRepeatedSprite(MODAPIEXAMPLE_SPRITE_RED, 32, 32)
