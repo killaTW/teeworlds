@@ -1857,8 +1857,8 @@ bool CServer::CreateMod(const char* pModName)
 	
 	ModCreator.AddLineStyle()
 		//~ .SetLineRepeatedSprite(MODAPIEXAMPLE_SPRITE_XMASLINE, 32, 32)
-		.SetOuter(7.0f, vec4(216.0f/255.0, 131.0f/255.0, 255.0f/255.0, 1.0f))
-		.SetInner(5.0f, vec4(117.0f/255.0, 0.0f/255.0, 178.0f/255.0, 1.0f))
+		.SetOuter(7.0f, vec4(117.0f/255.0, 0.0f/255.0, 178.0f/255.0, 1.0f))
+		.SetInner(5.0f, vec4(216.0f/255.0, 131.0f/255.0, 255.0f/255.0, 1.0f))
 		.SetStartPointAnimatedSprite(MODAPIEXAMPLE_SPRITE_LASERBEAM_START, MODAPIEXAMPLE_SPRITE_LASERBEAM_START2, -10, 0, 32, 32, 700)
 		.SetEndPointAnimatedSprite(MODAPIEXAMPLE_SPRITE_LASERBEAM_END, MODAPIEXAMPLE_SPRITE_LASERBEAM_END2, 10, 0, 32, 32, 700);
 		
