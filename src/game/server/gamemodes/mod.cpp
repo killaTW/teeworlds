@@ -60,10 +60,10 @@ void CGameControllerMOD::OnCharacterSpawn(CCharacter *pChr)
 	pChr->IncreaseHealth(10);
 	pChr->IncreaseArmor(5);
 
-	pChr->RemoveWeapon(WEAPON_HAMMER);
 	pChr->RemoveWeapon(WEAPON_GUN);
 	pChr->RemoveWeapon(WEAPON_SHOTGUN);
 	pChr->RemoveWeapon(WEAPON_GRENADE);
+	pChr->GiveWeapon(WEAPON_HAMMER, -1);
 	pChr->GiveWeapon(WEAPON_LASER, -1);
 	
 	pChr->SetActiveWeapon(WEAPON_LASER);

@@ -1848,19 +1848,17 @@ bool CServer::CreateMod(const char* pModName)
 	str_format(aBuf, sizeof(aBuf), "mods/%s.mod", pModName);
 	
 	CModAPI_ModCreator ModCreator;
-	if(ModCreator.AddImage(Storage(), "modapi/example.png") != MODAPIEXAMPLE_IMAGE_EXAMPLE) return false;
-	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_EXAMPLE, 0, 0, 2, 2, 32, 32) != MODAPIEXAMPLE_SPRITE_TARGET) return false;
-	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_EXAMPLE, 2, 0, 1, 1, 32, 32) != MODAPIEXAMPLE_SPRITE_XMASLINESTART) return false;
-	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_EXAMPLE, 3, 0, 1, 1, 32, 32) != MODAPIEXAMPLE_SPRITE_XMASLINE) return false;
-	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_EXAMPLE, 4, 0, 2, 2, 32, 32) != MODAPIEXAMPLE_SPRITE_XMASLINEEND) return false;
-	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_EXAMPLE, 0, 2, 1, 1, 32, 32) != MODAPIEXAMPLE_SPRITE_RED) return false;
-	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_EXAMPLE, 1, 2, 1, 1, 32, 32) != MODAPIEXAMPLE_SPRITE_BLUE) return false;
-	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_EXAMPLE, 2, 2, 1, 1, 32, 32) != MODAPIEXAMPLE_SPRITE_GREEN) return false;
+	if(ModCreator.AddImage(Storage(), "modapi/objects.png") != MODAPIEXAMPLE_IMAGE_OBJECTS) return false;
+	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_OBJECTS, 0, 0, 2, 2, 32, 32) != MODAPIEXAMPLE_SPRITE_TARGET) return false;
+	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_OBJECTS, 2, 0, 1, 1, 32, 32) != MODAPIEXAMPLE_SPRITE_LASERBEAM_START) return false;
+	if(ModCreator.AddSpriteExternal(MODAPIEXAMPLE_IMAGE_OBJECTS, 3, 0, 1, 1, 32, 32) != MODAPIEXAMPLE_SPRITE_LASERBEAM_END) return false;
 	
 	ModCreator.AddLineStyle()
-		.SetLineRepeatedSprite(MODAPIEXAMPLE_SPRITE_XMASLINE, 32, 32)
-		.SetStartPointSprite(MODAPIEXAMPLE_SPRITE_XMASLINESTART, -16, 0, 32, 32)
-		.SetEndPointSprite(MODAPIEXAMPLE_SPRITE_XMASLINEEND, 32, 16, 64, 64);
+		//~ .SetLineRepeatedSprite(MODAPIEXAMPLE_SPRITE_XMASLINE, 32, 32)
+		.SetOuter(7.0f, vec4(0.075f, 0.075f, 0.25f, 1.0f))
+		.SetInner(5.0f, vec4(0.5f, 0.5f, 1.0f, 1.0f))
+		.SetStartPointSprite(MODAPIEXAMPLE_SPRITE_LASERBEAM_START, -10, 0, 32, 32)
+		.SetEndPointSprite(MODAPIEXAMPLE_SPRITE_LASERBEAM_END, 10, 0, 32, 32);
 		
 	//~ ModCreator.AddLineStyle()
 		//~ .SetLineRepeatedSprite(MODAPIEXAMPLE_SPRITE_RED, 32, 32)

@@ -47,7 +47,7 @@ void CLine::Snap(int SnappingClient)
 		if(!pLine)
 			return;
 			
-		pLine->m_LineStyleId = MODAPIEXAMPLE_LINESTYLE_XMAS;
+		pLine->m_LineStyleId = MODAPIEXAMPLE_LINESTYLE_LASERBEAM;
 		pLine->m_StartX = (int) m_Pos.x;
 		pLine->m_StartY = (int) m_Pos.y;
 		pLine->m_EndX = (int)m_EndPos.x;
