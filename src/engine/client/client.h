@@ -263,6 +263,11 @@ public:
 	virtual const char *MapDownloadName() const { return m_aMapdownloadName; }
 	virtual int MapDownloadAmount() const { return m_MapdownloadAmount; }
 	virtual int MapDownloadTotalsize() const { return m_MapdownloadTotalsize; }
+	
+	//ModAPI
+	virtual const char *ModDownloadName() const { return m_aModdownloadName; }
+	virtual int ModDownloadAmount() const { return m_ModdownloadAmount; }
+	virtual int ModDownloadTotalsize() const { return m_ModdownloadTotalsize; }
 
 	void PumpNetwork();
 
@@ -337,8 +342,8 @@ public:
 	
 	virtual CModAPI_Client_Graphics *ModAPIGraphics() const { return m_pModAPIGraphics; }
 	
-	bool m_IsDownloadingMod;
-	bool m_MapDownloadNeeded;
-	bool m_IsDownloadingMap;
+	//ModAPI download both parallel
+	bool m_ModDownloadFinished;
+	bool m_MapDownloadFinished;
 };
 #endif

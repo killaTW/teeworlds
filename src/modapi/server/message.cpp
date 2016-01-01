@@ -1,5 +1,5 @@
 #include <modapi/compatibility.h>
-#include <modapi/message.h>
+#include <modapi/server/message.h>
 
 #include <engine/server.h>
 
@@ -42,6 +42,12 @@ void CModAPI_Msg_Broadcast::Send(int ClientID, const char* pMessage)
 			CNetMsg_Sv_Chat Msg;
 			Msg.m_Team = 0;
 			Msg.m_ClientID = -1;
+			Msg.m_pMessage = pMessage;
+			Server()->SendPackMsg(&Msg, MSGFLAG_VITAL, ClientID);
+		}
+		else if(m_Alternative == MODAPIALT_BROADCAST_MOTD)
+		{
+			CNetMsg_Sv_Motd Msg;
 			Msg.m_pMessage = pMessage;
 			Server()->SendPackMsg(&Msg, MSGFLAG_VITAL, ClientID);
 		}

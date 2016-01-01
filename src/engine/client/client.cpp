@@ -17,7 +17,6 @@
 #include <engine/input.h>
 #include <engine/keys.h>
 #include <engine/map.h>
-#include <engine/mod.h>
 #include <engine/masterserver.h>
 #include <engine/serverbrowser.h>
 #include <engine/sound.h>
@@ -40,6 +39,9 @@
 
 #include <mastersrv/mastersrv.h>
 #include <versionsrv/versionsrv.h>
+
+//ModAPI
+#include <modapi/shared/mod.h>
 
 #include "friends.h"
 #include "serverbrowser.h"
@@ -249,6 +251,7 @@ CClient::CClient() : m_DemoPlayer(&m_SnapshotDelta), m_DemoRecorder(&m_SnapshotD
 	m_pSound = 0;
 	m_pGameClient = 0;
 	m_pMap = 0;
+	m_pMod = 0;
 	m_pConsole = 0;
 
 	m_RenderFrameTime = 0.0001f;
@@ -281,6 +284,9 @@ CClient::CClient() : m_DemoPlayer(&m_SnapshotDelta), m_DemoRecorder(&m_SnapshotD
 
 	//
 	m_aCmdConnect[0] = 0;
+	
+	m_ModDownloadFinished = false;
+	m_MapDownloadFinished = false;
 
 	// map download
 	m_aMapdownloadFilename[0] = 0;
@@ -352,10 +358,6 @@ void CClient::SendInfo()
 	Msg.AddString(GameClient()->NetVersion(), 128);
 	Msg.AddString(g_Config.m_Password, 128);
 	SendMsg(&Msg, MSGFLAG_VITAL|MSGFLAG_FLUSH);
-	
-	m_IsDownloadingMod = false;
-	m_IsDownloadingMap = false;
-	m_MapDownloadNeeded = false;
 }
 
 
@@ -562,7 +564,17 @@ void CClient::DisconnectWithReason(const char *pReason)
 	m_pConsole->DeregisterTempAll();
 	m_NetClient.Disconnect(pReason);
 	SetState(IClient::STATE_OFFLINE);
+	
+	m_ModDownloadFinished = false;
+	m_MapDownloadFinished = false;
+	
 	m_pMap->Unload();
+	
+	//ModAPI unload mod graphics
+	if(ModAPIGraphics())
+	{
+		ModAPIGraphics()->OnModUnloaded(Graphics());
+	}
 
 	// disable all downloads
 	m_MapdownloadChunk = 0;
@@ -572,6 +584,17 @@ void CClient::DisconnectWithReason(const char *pReason)
 	m_MapdownloadCrc = 0;
 	m_MapdownloadTotalsize = -1;
 	m_MapdownloadAmount = 0;
+	
+	//ModAPI unload the mod and disable all downloads
+	m_pMod->Unload();
+
+	m_ModdownloadChunk = 0;
+	if(m_ModdownloadFile)
+		io_close(m_ModdownloadFile);
+	m_ModdownloadFile = 0;
+	m_ModdownloadCrc = 0;
+	m_ModdownloadTotalsize = -1;
+	m_ModdownloadAmount = 0;
 
 	// clear the current server info
 	mem_zero(&m_CurrentServerInfo, sizeof(m_CurrentServerInfo));
@@ -788,7 +811,7 @@ void CClient::Render()
 const char *CClient::LoadMap(const char *pName, const char *pFilename, unsigned WantedCrc)
 {
 	static char aErrorMsg[128];
-
+	
 	SetState(IClient::STATE_LOADING);
 
 	if(!m_pMap->Load(pFilename))
@@ -828,6 +851,7 @@ const char *CClient::LoadMapSearch(const char *pMapName, int WantedCrc)
 	char aBuf[512];
 	str_format(aBuf, sizeof(aBuf), "loading map, map=%s wanted crc=%08x", pMapName, WantedCrc);
 	m_pConsole->Print(IConsole::OUTPUT_LEVEL_ADDINFO, "client", aBuf);
+	
 	SetState(IClient::STATE_LOADING);
 
 	// try the normal maps folder
@@ -1040,6 +1064,7 @@ void CClient::ProcessServerPacket(CNetChunk *pPacket)
 		bool SimulateMapChangeMsg = false;
 		
 		// system message
+		//ModAPI
 		if((pPacket->m_Flags&NET_CHUNKFLAG_VITAL) != 0 && Msg == NETMSG_MODAPI_INITDATA)
 		{
 			SimulateMapChangeMsg = true;
@@ -1054,7 +1079,7 @@ void CClient::ProcessServerPacket(CNetChunk *pPacket)
 			if(Unpacker.Error())
 				return;
 
-			// protect the player from nasty map names
+			// protect the player from nasty mod names
 			for(int i = 0; pMod[i]; i++)
 			{
 				if(pMod[i] == '/' || pMod[i] == '\\')
@@ -1073,10 +1098,11 @@ void CClient::ProcessServerPacket(CNetChunk *pPacket)
 				if(!pError)
 				{
 					m_pConsole->Print(IConsole::OUTPUT_LEVEL_ADDINFO, "client/network", "loading done");
+					m_ModDownloadFinished = true;
 				}
 				else
 				{
-					// start map download
+					// start mod download
 					str_format(m_aModdownloadFilename, sizeof(m_aModdownloadFilename), "downloadedmods/%s_%08x.mod", pMod, ModCrc);
 
 					char aBuf[256];
@@ -1094,11 +1120,11 @@ void CClient::ProcessServerPacket(CNetChunk *pPacket)
 					m_ModdownloadTotalsize = ModSize;
 					m_ModdownloadAmount = 0;
 
-					// request first chunk package of map data
+					// request first chunk package of mod data
 					CMsgPacker Msg(NETMSG_MODAPI_REQUEST_MOD_DATA, true);
 					SendMsg(&Msg, MSGFLAG_VITAL|MSGFLAG_FLUSH);
 					
-					m_IsDownloadingMod = true;
+					m_ModDownloadFinished = false;
 
 					if(g_Config.m_Debug)
 						m_pConsole->Print(IConsole::OUTPUT_LEVEL_DEBUG, "client/network", "requested first chunk package");
@@ -1140,7 +1166,8 @@ void CClient::ProcessServerPacket(CNetChunk *pPacket)
 				if(!pError)
 				{
 					m_pConsole->Print(IConsole::OUTPUT_LEVEL_ADDINFO, "client/network", "loading done");
-					if(!m_IsDownloadingMod)
+					m_MapDownloadFinished = true;
+					if(m_ModDownloadFinished)
 					{
 						SendReady();
 					}
@@ -1166,20 +1193,13 @@ void CClient::ProcessServerPacket(CNetChunk *pPacket)
 					m_MapdownloadAmount = 0;
 
 					// request first chunk package of map data
-					if(m_IsDownloadingMod)
-					{
-						m_MapDownloadNeeded = true;
-					}
-					else
-					{
-						CMsgPacker Msg(NETMSG_REQUEST_MAP_DATA, true);
-						SendMsg(&Msg, MSGFLAG_VITAL|MSGFLAG_FLUSH);
-
-						if(g_Config.m_Debug)
-							m_pConsole->Print(IConsole::OUTPUT_LEVEL_DEBUG, "client/network", "requested first chunk package");
+					SetState(IClient::STATE_LOADING);
+					CMsgPacker Msg(NETMSG_REQUEST_MAP_DATA, true);
+					SendMsg(&Msg, MSGFLAG_VITAL|MSGFLAG_FLUSH);
+					if(g_Config.m_Debug)
+						m_pConsole->Print(IConsole::OUTPUT_LEVEL_DEBUG, "client/network", "requested first chunk package");
 						
-						m_IsDownloadingMap = true;
-					}
+					m_MapDownloadFinished = false;
 				}
 			}
 		}
@@ -1208,14 +1228,17 @@ void CClient::ProcessServerPacket(CNetChunk *pPacket)
 				m_MapdownloadAmount = 0;
 				m_MapdownloadTotalsize = -1;
 				
-				m_IsDownloadingMap = false;
+				m_MapDownloadFinished = true;
 
 				// load map
 				const char *pError = LoadMap(m_aMapdownloadName, m_aMapdownloadFilename, m_MapdownloadCrc);
 				if(!pError)
 				{
 					m_pConsole->Print(IConsole::OUTPUT_LEVEL_ADDINFO, "client/network", "loading done");
-					SendReady();
+					if(m_ModDownloadFinished)
+					{
+						SendReady();
+					}
 				}
 				else
 					DisconnectWithReason(pError);
@@ -1230,6 +1253,7 @@ void CClient::ProcessServerPacket(CNetChunk *pPacket)
 					m_pConsole->Print(IConsole::OUTPUT_LEVEL_DEBUG, "client/network", "requested next chunk package");
 			}
 		}
+		//ModAPI
 		else if((pPacket->m_Flags&NET_CHUNKFLAG_VITAL) != 0 && Msg == NETMSG_MODAPI_MOD_DATA)
 		{			
 			if(!m_ModdownloadFile)
@@ -1246,7 +1270,7 @@ void CClient::ProcessServerPacket(CNetChunk *pPacket)
 
 			if(m_ModdownloadAmount == m_ModdownloadTotalsize)
 			{
-				// map download complete
+				// mod download complete
 				m_pConsole->Print(IConsole::OUTPUT_LEVEL_ADDINFO, "client/network", "download complete, loading mod");
 
 				if(m_ModdownloadFile)
@@ -1255,27 +1279,14 @@ void CClient::ProcessServerPacket(CNetChunk *pPacket)
 				m_ModdownloadAmount = 0;
 				m_ModdownloadTotalsize = -1;
 				
-				m_IsDownloadingMod = false;
+				m_ModDownloadFinished = true;
 
 				// load mod
 				const char *pError = LoadMod(m_aModdownloadName, m_aModdownloadFilename, m_ModdownloadCrc);
 				if(!pError)
 				{
 					m_pConsole->Print(IConsole::OUTPUT_LEVEL_ADDINFO, "client/network", "loading done");
-					
-					if(m_MapDownloadNeeded)
-					{
-						m_MapDownloadNeeded = false;
-						
-						CMsgPacker Msg(NETMSG_REQUEST_MAP_DATA, true);
-						SendMsg(&Msg, MSGFLAG_VITAL|MSGFLAG_FLUSH);
-
-						if(g_Config.m_Debug)
-							m_pConsole->Print(IConsole::OUTPUT_LEVEL_DEBUG, "client/network", "requested first chunk package");
-						
-						m_IsDownloadingMap = true;
-					}
-					else
+					if(m_MapDownloadFinished)
 					{
 						SendReady();
 					}
@@ -1287,7 +1298,7 @@ void CClient::ProcessServerPacket(CNetChunk *pPacket)
 			}
 			else if(m_ModdownloadChunk%m_ModdownloadChunkNum == 0)
 			{
-				// request next chunk package of map data
+				// request next chunk package of mod data
 				CMsgPacker Msg(NETMSG_MODAPI_REQUEST_MOD_DATA, true);
 				SendMsg(&Msg, MSGFLAG_VITAL|MSGFLAG_FLUSH);
 
@@ -1385,7 +1396,7 @@ void CClient::ProcessServerPacket(CNetChunk *pPacket)
 			const char *pData = 0;
 
 			// we are not allowed to process snapshot yet
-			if(State() < IClient::STATE_LOADING)
+			if(State() <= IClient::STATE_CONNECTING)
 				return;
 
 			if(Msg == NETMSG_SNAP)
@@ -2658,7 +2669,7 @@ const char *CClient::LoadMod(const char *pName, const char *pFilename, unsigned 
 		return aErrorMsg;
 	}
 
-	// get the crc of the map
+	// get the crc of the mod
 	if(m_pMod->Crc() != WantedCrc)
 	{
 		str_format(aErrorMsg, sizeof(aErrorMsg), "mod differs from the server. %08x != %08x", m_pMod->Crc(), WantedCrc);
@@ -2667,7 +2678,7 @@ const char *CClient::LoadMod(const char *pName, const char *pFilename, unsigned 
 		return aErrorMsg;
 	}
 
-	// stop demo recording if we loaded a new map
+	// stop demo recording if we loaded a new mod
 	DemoRecorder_Stop();
 
 	char aBuf[256];
